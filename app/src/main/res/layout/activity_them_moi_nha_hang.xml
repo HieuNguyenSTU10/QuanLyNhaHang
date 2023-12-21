@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ThemMoiNhaHangActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-48dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thêm mới nhà hàng"
+            android:textAlignment="center"
+            android:textColor="#7071E8"
+            android:textSize="12pt"
+            android:textStyle="bold|italic" />
+
+        <ImageView
+            android:id="@+id/imgAnhNhaHang"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:src="@drawable/nhahang" />
+
+        <Button
+            android:id="@+id/btnChonAnhNhaHang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10px"
+            android:backgroundTint="#000FFE"
+            android:text="Chọn ảnh đại diện"
+            android:textSize="8pt"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnCacHinhAnhNhaHang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Các hình ảnh của nhà hàng"
+            android:textSize="8pt"
+            android:textStyle="bold"
+            android:backgroundTint="#00C2FE"/>
+        <EditText
+            android:id="@+id/edtTenNhaHang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập vào tên nhà hàng ...." />
+
+        <EditText
+            android:id="@+id/edtDiaChiNhaHang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập vào địa chỉ nhà hàng...." />
+
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập vào email nhà hàng...." />
+
+        <EditText
+            android:id="@+id/edtSoDienThoai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập vào số điện thoại nhà hàng...." />
+
+        <EditText
+            android:id="@+id/edtMoTaNhaHang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mô tả nhà hàng...." />
+
+<!--        Time picker 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10px">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                android:textSize="10pt"
+                android:textStyle="bold|italic"
+                android:text="Giờ mở cửa"/>
+
+            <TimePicker
+                android:id="@+id/tpGioMoCua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+<!--        Time Picker 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10px">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textAlignment="center"
+                android:textSize="10pt"
+                android:textStyle="bold|italic"
+                android:text="Giờ đóng cửa"/>
+
+            <TimePicker
+                android:id="@+id/tpGioDongCua"
+                android:layout_width="wrap_content"
+                android:layout_height="95dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+<!--    Đoạn thực đơn-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnThucDon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thực đơn nhà hàng"
+                android:backgroundTint="#00FE35"
+                android:textSize="9pt"
+                android:textStyle="bold|italic"/>
+
+        </LinearLayout>
+
+<!--      Các nút bấm-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btnHuyBo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hủy bỏ"
+                android:textSize="8pt"
+                android:backgroundTint="#D70606"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btnXacNhan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Xác nhận"
+                android:textSize="8pt"
+                android:backgroundTint="#0665F1"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

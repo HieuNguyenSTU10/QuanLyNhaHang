@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".XemChiTietNhaHang">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chi tiết nhà hàng"
+                android:textSize="16pt"
+                android:textStyle="bold|italic"
+                android:textAlignment="center"/>
+
+            <TextView
+                android:id="@+id/tvTenNhaHang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên nhà hàng"
+                android:textAlignment="center"
+                android:textSize="12pt"
+                android:textStyle="bold"
+                android:layout_margin="10dp"/>
+
+            <ImageView
+                android:id="@+id/ivAnhNhaHang"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@drawable/nhahang"/>
+
+            <TextView
+                android:id="@+id/tvDiaChiNhaHang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Địa chỉ nhà hàng :"
+                android:textSize="8pt"
+                android:layout_margin="15px"/>
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email : "
+                android:textSize="8pt"
+                android:layout_margin="15px"/>
+
+            <TextView
+                android:id="@+id/tvSoDienThoai"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Số điện thoại : "
+                android:textSize="8pt"
+                android:layout_margin="15px"/>
+
+            <TextView
+                android:id="@+id/tvGioMoCua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Giờ mở cửa : "
+                android:textSize="8pt"
+                android:layout_margin="15px"/>
+
+            <TextView
+                android:id="@+id/tvMoTaNhaHang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mô tả nhà hàng : "
+                android:textSize="8pt"
+                android:layout_margin="15px"/>
+
+            <Button
+                android:id="@+id/btnXemAnhNhaHang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Xem các ảnh của nhà hàng"/>
+
+            <Button
+                android:id="@+id/btnXemThucDon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Xem thực đơn của nhà hàng"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnTroLai"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Trở lại"/>
+
+                <Button
+                    android:id="@+id/btnSuaNhaHang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sửa nhà hàng"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

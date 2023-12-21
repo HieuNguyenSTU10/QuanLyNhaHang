@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/tvTenNhaHang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Tên nhà hàng"
+            android:textColor="#6B240C"
+            android:textSize="12pt"
+            android:textStyle="bold|italic" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivAnhNhaHang"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_launcher_foreground"
+                android:padding="5px"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/black"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="  Đặt bàn \n (Booking)"
+                    android:gravity="center_horizontal"
+                    android:textColor="#994D1C"
+                    android:textSize="8pt"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="20px"
+                    android:layout_marginTop="20px"/>
+
+                <TextView
+                    android:id="@+id/tvSoDienThoai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Số điện thoại : 0379273403"
+                    android:textAlignment="center"
+                    android:textStyle="italic"
+                    android:layout_marginBottom="20px"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"/>
+
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Giờ mở cửa"
+                    android:gravity="center_horizontal"
+                    android:textColor="#994D1C"
+                    android:textSize="8pt"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="30px" />
+
+                <TextView
+                    android:id="@+id/tvGioMoCua"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="09:00 - 11:00"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="5px"
+                    android:textColor="#994D1C"
+                    android:textSize="8pt"
+                    android:textStyle="bold"
+                    android:paddingLeft="30px"/>
+            </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Địa chỉ"
+                    android:gravity="center_horizontal"
+                    android:textColor="#994D1C"
+                    android:textSize="8pt"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10px"/>
+
+                <TextView
+                    android:id="@+id/tvDiaChi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mô tả nhà hàng tại đây !"
+                    android:layout_marginBottom="10px"
+                    android:textAlignment="center"
+                    android:textSize="6pt"
+                    android:paddingLeft="30px"/>
+            </LinearLayout>
+        </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                android:layout_marginBottom="5px"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
