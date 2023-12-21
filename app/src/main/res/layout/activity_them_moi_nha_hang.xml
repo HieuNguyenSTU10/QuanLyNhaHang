@@ -118,12 +118,13 @@
                 android:textAlignment="center"
                 android:textSize="10pt"
                 android:textStyle="bold|italic"
-                android:text="Giờ đóng cửa"/>
+                android:text="Giờ đóng cửa"
+                tools:ignore="RtlCompat" />
 
             <TimePicker
                 android:id="@+id/tpGioDongCua"
                 android:layout_width="wrap_content"
-                android:layout_height="95dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
         </LinearLayout>
