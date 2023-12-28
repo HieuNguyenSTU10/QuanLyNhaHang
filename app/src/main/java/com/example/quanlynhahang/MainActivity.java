@@ -67,9 +67,23 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listNhaHang.clear();
                 for (DataSnapshot data: snapshot.getChildren()){
+                    NhaHang nh = data.getValue(NhaHang.class);
+                    DataSnapshot data4 = data.child("danhGia");
+                    float sumda=0;
+                    float arrda=0;
+
+                    for (DataSnapshot a : data4.getChildren())
+                    {
+                        sumda+=Float.parseFloat(a.getValue().toString());
+                    }
+                    arrda = sumda / data4.getChildrenCount();
+                    System.out.println("count"+data4.getChildrenCount());
+                    System.out.println(arrda);
+                    nh.setTb(arrda);
+
                     ArrayList<monAn> listMonAn = new ArrayList<>();
                     DataSnapshot data1 = data.child("thucDon");
-                    NhaHang nh = data.getValue(NhaHang.class);
+
                     for (DataSnapshot data2: data1.getChildren()){
                         monAn ma = data2.getValue(monAn.class);
                         if (ma != null){
@@ -81,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     for (DataSnapshot data3 : dataCacAnhNhaHang.getChildren()){
                         hinhanhs.add(data3.getValue().toString());
                     }
+
                     nh.setListHinhAnh(hinhanhs);
                     nh.setListMonAn(listMonAn);
                     if (nh != null){

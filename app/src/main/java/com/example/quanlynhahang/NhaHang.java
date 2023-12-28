@@ -3,10 +3,10 @@ package com.example.quanlynhahang;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NhaHang implements Serializable {
 //    ArrayList<String> binhLuan;
-//    ArrayList<Double> danhGia;
     String id;
     String diaChiNhaHang;
     String gioMoCua;
@@ -17,13 +17,17 @@ public class NhaHang implements Serializable {
     String tenNhaHang;
     ArrayList<monAn> listMonAn;
     ArrayList<String> listHinhAnh;
+    Float tb;
+
+
 
     public NhaHang(){};
-//    ArrayList<String> binhLuan, ArrayList<Double> danhGia,
+
     public NhaHang(String diaChiNhaHang, String gioMoCua, String anhNhaHang, ArrayList<String> listHinhAnh, String id,
-                   String email, String moTaNhaHang, String soDienThoai, String tenNhaHang, ArrayList<monAn> listMonAn) {
+                   String email, String moTaNhaHang, String soDienThoai, String tenNhaHang, ArrayList<monAn> listMonAn,
+                   Float tb) {
 //        this.binhLuan = binhLuan;
-//        this.danhGia = danhGia;
+        this.tb = tb;
         this.diaChiNhaHang = diaChiNhaHang;
         this.email = email;
         this.moTaNhaHang = moTaNhaHang;
@@ -36,21 +40,13 @@ public class NhaHang implements Serializable {
         this.id = id;
     }
 
-//    public ArrayList<String> getBinhLuan() {
-//        return binhLuan;
-//    }
-//
-//    public void setBinhLuan(ArrayList<String> binhLuan) {
-//        this.binhLuan = binhLuan;
-//    }
-//
-//    public ArrayList<Double> getDanhGia() {
-//        return danhGia;
-//    }
-//
-//    public void setDanhGia(ArrayList<Double> danhGia) {
-//        this.danhGia = danhGia;
-//    }
+    public Float getTb() {
+        return tb;
+    }
+
+    public void setTb(Float tb) {
+        this.tb = tb;
+    }
 
     public String getDiaChiNhaHang() {
         return diaChiNhaHang;

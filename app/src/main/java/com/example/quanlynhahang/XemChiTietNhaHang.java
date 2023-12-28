@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -22,12 +23,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class XemChiTietNhaHang extends AppCompatActivity {
-    TextView tvTenNhaHang, tvDiaChiNhaHang, tvEmail, tvSoDienThoai, tvGioMoCua, tvMoTaNhaHang;
+    TextView tvTenNhaHang, tvDiaChiNhaHang, tvEmail, tvSoDienThoai, tvGioMoCua, tvMoTaNhaHang,textrating;
     Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang;
     ImageButton GuiEmail,phone,sms;
     ImageView ivAnhNhaHang;
+    RatingBar rating;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
     DatabaseReference nhaHang = databaseReference.child("nhaHang");
@@ -52,6 +56,19 @@ public class XemChiTietNhaHang extends AppCompatActivity {
         GuiEmail = findViewById(R.id.mail);
         phone = findViewById(R.id.phone);
         sms= findViewById(R.id.sms);
+        rating = findViewById(R.id.rating);
+        textrating = findViewById(R.id.textrating);
+
+
+
+        //hiện dánh giá
+        Intent intent = getIntent();
+        Bundle data =  intent.getExtras();
+        a = (NhaHang) data.getSerializable("nhahang");
+
+        Float rate = (float) Math.ceil(a.getTb() * 10) / 10;
+        rating.setRating(rate);
+        textrating.setText(rate+"/5");
 
         // Phan code
 
@@ -63,9 +80,7 @@ public class XemChiTietNhaHang extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        Bundle data =  intent.getExtras();
-        a = (NhaHang) data.getSerializable("nhahang");
+
 
         tvTenNhaHang.setText(a.getTenNhaHang());
         tvDiaChiNhaHang.setText("Địa chỉ : " + a.getDiaChiNhaHang());
