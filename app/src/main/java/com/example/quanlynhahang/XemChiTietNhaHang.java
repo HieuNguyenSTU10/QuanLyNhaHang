@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class XemChiTietNhaHang extends AppCompatActivity {
     TextView tvTenNhaHang, tvDiaChiNhaHang, tvEmail, tvSoDienThoai, tvGioMoCua, tvMoTaNhaHang;
-    Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang;
+    Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang,GuiEmail;
     ImageView ivAnhNhaHang;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -45,6 +45,7 @@ public class XemChiTietNhaHang extends AppCompatActivity {
         btnXemThucDon = findViewById(R.id.btnXemThucDon);
         btnSuaNhaHang = findViewById(R.id.btnSuaNhaHang);
         ivAnhNhaHang = findViewById(R.id.ivAnhNhaHang);
+        GuiEmail = findViewById(R.id.GuiEmail);
 
         // Phan code
 
@@ -100,7 +101,20 @@ public class XemChiTietNhaHang extends AppCompatActivity {
                 startActivityForResult(suaNhaHang,104);
             }
         });
+
+        GuiEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent guiemail = new Intent( XemChiTietNhaHang.this, GuiEmail.class);
+                Bundle data= new Bundle();
+                data.putSerializable("email",a.getEmail());
+                guiemail.putExtras(data);
+                startActivityForResult(guiemail, 105);
+            }
+        });
     }
+
+
 
     // Doan set result code duh
     @Override

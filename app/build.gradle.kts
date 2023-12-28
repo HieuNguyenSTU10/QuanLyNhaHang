@@ -1,4 +1,4 @@
-plugins {
+    plugins {
     id("com.android.application")
     id ("com.google.gms.google-services")
 }
@@ -31,6 +31,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    // option email
     packagingOptions{
         exclude("META-INF/NOTICE.md")
         exclude("META-INF/LICENSE.md")

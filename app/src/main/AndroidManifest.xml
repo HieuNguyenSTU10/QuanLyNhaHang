@@ -15,6 +15,9 @@
         android:theme="@style/Theme.QuanLyNhaHang"
         tools:targetApi="31">
         <activity
+            android:name=".GuiEmail"
+            android:exported="false" />
+        <activity
             android:name=".SuaMonAnActivity"
             android:exported="false" />
         <activity

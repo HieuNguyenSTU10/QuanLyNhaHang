@@ -89,6 +89,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Xem thực đơn của nhà hàng"/>
+            <Button
+                android:id="@+id/GuiEmail"
+                android:text="Gửi email cho nhà hàng"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
