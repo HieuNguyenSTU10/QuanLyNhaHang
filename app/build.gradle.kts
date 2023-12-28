@@ -57,4 +57,7 @@ dependencies {
     // Import Email
     implementation ("com.sun.mail:android-mail:1.6.6")
     implementation ("com.sun.mail:android-activation:1.6.7")
+
+    // Import Google Map Service
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
 }

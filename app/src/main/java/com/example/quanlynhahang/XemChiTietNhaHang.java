@@ -29,7 +29,7 @@ import java.util.Set;
 public class XemChiTietNhaHang extends AppCompatActivity {
     TextView tvTenNhaHang, tvDiaChiNhaHang, tvEmail, tvSoDienThoai, tvGioMoCua, tvMoTaNhaHang,textrating;
     Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang;
-    ImageButton GuiEmail,phone,sms;
+    ImageButton GuiEmail,phone,sms,btnShowMap;
     ImageView ivAnhNhaHang;
     RatingBar rating;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -52,6 +52,7 @@ public class XemChiTietNhaHang extends AppCompatActivity {
         btnXemThucDon = findViewById(R.id.btnXemThucDon);
         btnSuaNhaHang = findViewById(R.id.btnSuaNhaHang);
         ivAnhNhaHang = findViewById(R.id.ivAnhNhaHang);
+        btnShowMap = findViewById(R.id.btnShowMap);
 
         GuiEmail = findViewById(R.id.mail);
         phone = findViewById(R.id.phone);
@@ -72,6 +73,14 @@ public class XemChiTietNhaHang extends AppCompatActivity {
 
         // Phan code
 
+        btnShowMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(XemChiTietNhaHang.this,MapsActivity.class);
+                intent.putExtra("nhahang_id", a.getId());
+                startActivity(intent);
+            }
+        });
         btnTroLai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

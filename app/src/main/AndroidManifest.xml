@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -15,7 +17,10 @@
         android:theme="@style/Theme.QuanLyNhaHang"
         tools:targetApi="31">
         <activity
-            android:name=".GuiEmail"
+
+            android:name=".GuiEmail"/>
+        <activity
+            android:name=".MapsActivity"
             android:exported="false" />
         <activity
             android:name=".SuaMonAnActivity"
@@ -50,6 +55,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCeMnxO_0R8ajx_wjd5y8PDnA75Uw_PLsM" />
     </application>
 
 </manifest>
