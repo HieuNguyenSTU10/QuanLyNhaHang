@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +25,8 @@ import java.util.ArrayList;
 
 public class XemChiTietNhaHang extends AppCompatActivity {
     TextView tvTenNhaHang, tvDiaChiNhaHang, tvEmail, tvSoDienThoai, tvGioMoCua, tvMoTaNhaHang;
-    Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang,GuiEmail;
+    Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang;
+    ImageButton GuiEmail,phone,sms;
     ImageView ivAnhNhaHang;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -45,7 +48,10 @@ public class XemChiTietNhaHang extends AppCompatActivity {
         btnXemThucDon = findViewById(R.id.btnXemThucDon);
         btnSuaNhaHang = findViewById(R.id.btnSuaNhaHang);
         ivAnhNhaHang = findViewById(R.id.ivAnhNhaHang);
-        GuiEmail = findViewById(R.id.GuiEmail);
+
+        GuiEmail = findViewById(R.id.mail);
+        phone = findViewById(R.id.phone);
+        sms= findViewById(R.id.sms);
 
         // Phan code
 
@@ -107,9 +113,27 @@ public class XemChiTietNhaHang extends AppCompatActivity {
             public void onClick(View v) {
                 Intent guiemail = new Intent( XemChiTietNhaHang.this, GuiEmail.class);
                 Bundle data= new Bundle();
-                data.putSerializable("email",a.getEmail());
+                data.putSerializable("nhahang",a);
                 guiemail.putExtras(data);
                 startActivityForResult(guiemail, 105);
+            }
+        });
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri phoneuri = Uri.parse("tel: " +a.getSoDienThoai());
+                Intent goiDienIntent = new Intent(Intent.ACTION_DIAL,phoneuri); // chỉ chuyển sang màn hình gọi điện
+                startActivity(goiDienIntent);
+            }
+        });
+
+        sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri smsuri = Uri.parse("smsto: " +a.getSoDienThoai());
+                Intent smsIntent = new Intent(Intent.ACTION_SENDTO,smsuri);
+                startActivity(smsIntent);
             }
         });
     }

@@ -26,9 +26,10 @@ import javax.mail.internet.MimeMessage;
 //    mdyv jwpn wunh vkov : mã pass app email
 
 public class GuiEmail extends AppCompatActivity {
-    TextView edtEmailTo;
+    TextView edtEmailTo,TenNH;
     EditText edtContent,edtSubject;
     Button btnSend,btnTroLai;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,15 +38,20 @@ public class GuiEmail extends AppCompatActivity {
         // Lay itent
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
-        String email = (String) data.getSerializable("email");
+        NhaHang a = (NhaHang) data.getSerializable("nhahang");
+
+        String email = a.getEmail();
+        String name = a.getTenNhaHang();
 
         edtEmailTo = findViewById(R.id.edtEmailTo);
         edtContent = findViewById(R.id.edtContent);
         edtSubject = findViewById(R.id.edtSubject);
         btnSend = findViewById(R.id.btnSend);
         btnTroLai = findViewById(R.id.btnTroLai);
+        TenNH = findViewById(R.id.tenNH);
 
         edtEmailTo.setText(email);
+        TenNH.setText(name);
 
         btnTroLai.setOnClickListener(new View.OnClickListener() {
             @Override
