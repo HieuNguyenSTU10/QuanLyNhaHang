@@ -90,6 +90,12 @@
                 android:layout_height="wrap_content"
                 android:text="Xem thực đơn của nhà hàng"/>
 
+            <Button
+                android:id="@+id/btnShowMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Xem địa chỉ"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

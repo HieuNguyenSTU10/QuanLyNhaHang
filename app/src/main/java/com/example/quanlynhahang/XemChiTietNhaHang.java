@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class XemChiTietNhaHang extends AppCompatActivity {
-    TextView tvTenNhaHang, tvDiaChiNhaHang, tvEmail, tvSoDienThoai, tvGioMoCua, tvMoTaNhaHang;
+    TextView tvTenNhaHang, tvDiaChiNhaHang, tvEmail, tvSoDienThoai, tvGioMoCua, tvMoTaNhaHang, btnShowMap;
     Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang;
     ImageView ivAnhNhaHang;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -45,9 +45,18 @@ public class XemChiTietNhaHang extends AppCompatActivity {
         btnXemThucDon = findViewById(R.id.btnXemThucDon);
         btnSuaNhaHang = findViewById(R.id.btnSuaNhaHang);
         ivAnhNhaHang = findViewById(R.id.ivAnhNhaHang);
+        btnShowMap = findViewById(R.id.btnShowMap);
 
         // Phan code
 
+        btnShowMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(XemChiTietNhaHang.this,MapsActivity.class);
+                intent.putExtra("nhahang_id", a.getId());
+                startActivity(intent);
+            }
+        });
         btnTroLai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
