@@ -21,10 +21,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -36,7 +40,7 @@ public class ThemAnhNhaHang extends AppCompatActivity {
     ImageView ivChonAnh;
     Button btnChonAnh, btnThemAnh, btnTroLai;
     ListView lvCacAnhNhaHang;
-    ArrayList<String> CacAnhNhaHang;
+    ArrayList<String> CacAnhNhaHang = new ArrayList<>();
     CacAnhNhaHangAdapter cacAnhNhaHangAdapter;
 
     // Firebase + Storage
@@ -45,6 +49,7 @@ public class ThemAnhNhaHang extends AppCompatActivity {
     DatabaseReference nhaHang = databaseReference.child("nhaHang");
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     StorageReference storageReference = firebaseStorage.getReference();
+    NhaHang new_nh = new NhaHang();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +77,8 @@ public class ThemAnhNhaHang extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
         NhaHang a = (NhaHang) data.getSerializable("nhahang");
+        new_nh = a;
+        System.out.println(a.getId());
         if (a.getListHinhAnh() != null){
             for (String src : a.getListHinhAnh()){
                 CacAnhNhaHang.add(src);
@@ -98,21 +105,51 @@ public class ThemAnhNhaHang extends AppCompatActivity {
                         dialogInterface.cancel();
                     }
                 });
+                System.out.println(position);
                 b.setPositiveButton("Chắc chắn", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        a.getListHinhAnh().remove(position);
-                        CacAnhNhaHang.clear();
-                        CacAnhNhaHang.addAll(a.getListHinhAnh());
+                        CacAnhNhaHang.remove(position);
+                        a.setListHinhAnh(CacAnhNhaHang);
+                        new_nh.setListHinhAnh(CacAnhNhaHang);
                         cacAnhNhaHangAdapter.notifyDataSetChanged();
-                        nhaHang.child(a.getId().toString()).child("cacAnhNhaHang")
-                                .setValue(a.getListHinhAnh()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Toast.makeText(ThemAnhNhaHang.this,
-                                                "Xóa ảnh thành công !", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+
+                        // Đoạn get key của ảnh + xóa ảnh.
+                        nhaHang.child(a.getId()).child("cacAnhNhaHang").addValueEventListener(new ValueEventListener() {
+                            int dem = 0;
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot data : snapshot.getChildren()){
+                                    System.out.println(dem + " vi tri thu i");
+                                    if (dem == position){
+                                        // Đoạn xóa
+                                        System.out.println(data.getKey());
+                                            StorageReference fileCanXoa = storageReference.child("anhNhaHang")
+                                                    .child(a.getId()).child(data.getKey()+".jpg");
+                                            fileCanXoa.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    nhaHang.child(a.getId().toString()).child("cacAnhNhaHang").child(data.getKey()).removeValue();
+                                                    Toast.makeText(ThemAnhNhaHang.this, "Xóa ảnh thành công"
+                                                            , Toast.LENGTH_SHORT).show();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(ThemAnhNhaHang.this, "Xóa ảnh thất bại !"
+                                                            , Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        dem++;
+                                        break;
+                                    } else dem++;
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
                     }
                 });
                 b.create().show();
@@ -130,7 +167,7 @@ public class ThemAnhNhaHang extends AppCompatActivity {
         btnThemAnh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id = nhaHang.child(a.getId().toString()).child("cacAnhNhaHang").push().getKey().toString();
+                String id = nhaHang.child(a.getId()).child("cacAnhNhaHang").push().getKey();
                 StorageReference anhNhaHang  =
                         storageReference.child("anhNhaHang").child(a.getId()).child(id + ".jpg");
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) ivChonAnh.getDrawable();
@@ -146,6 +183,8 @@ public class ThemAnhNhaHang extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
                                 String linkAnhMonAn = uri.toString();
                                 CacAnhNhaHang.add(linkAnhMonAn);
+                                a.setListHinhAnh(CacAnhNhaHang);
+                                new_nh.setListHinhAnh(CacAnhNhaHang);
                                 ivChonAnh.setImageResource(R.drawable.img);
                                 // Set value cho hinh anh
                                 nhaHang.child(a.getId().toString())
@@ -155,9 +194,6 @@ public class ThemAnhNhaHang extends AppCompatActivity {
                                                 if (task.isSuccessful()){
                                                     Toast.makeText(ThemAnhNhaHang.this,
                                                             "Thêm ảnh thành công", Toast.LENGTH_SHORT).show();
-                                                    CacAnhNhaHang.clear();
-                                                    CacAnhNhaHang.add(linkAnhMonAn);
-                                                    CacAnhNhaHang.addAll(a.getListHinhAnh());
                                                     cacAnhNhaHangAdapter.notifyDataSetChanged();
                                                 } else {
                                                     Toast.makeText(ThemAnhNhaHang.this,
@@ -166,6 +202,7 @@ public class ThemAnhNhaHang extends AppCompatActivity {
                                                 }
                                             }
                                         });
+                                cacAnhNhaHangAdapter.notifyDataSetChanged();
                             }
                         });
                     }
@@ -178,6 +215,7 @@ public class ThemAnhNhaHang extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent1 = new Intent();
                 Bundle data = new Bundle();
+                new_nh.setListHinhAnh(CacAnhNhaHang);
                 a.setListHinhAnh(CacAnhNhaHang);
                 data.putSerializable("nhahang",a);
                 intent1.putExtras(data);

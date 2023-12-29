@@ -55,8 +55,10 @@ public class NhaHangAdapter extends ArrayAdapter {
         tvGioMoCua.setText(nhaHang.getGioMoCua());
         tvDiaChi.setText(nhaHang.getDiaChiNhaHang());
 
-        if (nhaHang.getAnhNhaHang().trim().length() >0){
-            Glide.with(context.getBaseContext()).load(nhaHang.getAnhNhaHang()).into(ivAnhNhaHang);
+        if (nhaHang.getAnhNhaHang() != null){
+            if (nhaHang.getAnhNhaHang().length() >0){
+                Glide.with(context.getBaseContext()).load(nhaHang.getAnhNhaHang()).into(ivAnhNhaHang);
+            }
         }
 
         customView.setOnClickListener(new View.OnClickListener() {

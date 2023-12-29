@@ -3,25 +3,37 @@ package com.example.quanlynhahang;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ThemMoiNhaHangActivity extends AppCompatActivity {
     ImageView imgAnhNhaHang;
@@ -30,14 +42,17 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
     TimePicker tpGioMoCua,tpGioDongCua;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
-    DatabaseReference nhaHang = databaseReference.child("NhaHang");
+    DatabaseReference nhaHang = databaseReference.child("nhaHang");
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     StorageReference storageReference = firebaseStorage.getReference();
     NhaHang moi = new NhaHang();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String id = nhaHang.push().getKey().toString();
         setContentView(R.layout.activity_them_moi_nha_hang);
+        moi.setId(id);
+        System.out.println(id);
 
         // Ánh xạ
         imgAnhNhaHang = findViewById(R.id.imgAnhNhaHang);
@@ -75,6 +90,16 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
         btnHuyBo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                StorageReference fileCanXoa = storageReference.child("anhNhaHang")
+                        .child(id);
+                fileCanXoa.delete();
+                StorageReference fileCanXoa1 = storageReference.child("anhDaiDien")
+                        .child(id);
+                fileCanXoa1.delete();
+                StorageReference fileCanXoa2 = storageReference.child("anhMonAn")
+                        .child(id);
+                fileCanXoa2.delete();
+                nhaHang.child(id).removeValue();
                 finish();
             }
         });
@@ -89,7 +114,14 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
                 String email = edtEmail.getText().toString().trim();
                 String moTaNhaHang = edtMoTaNhaHang.getText().toString().trim();
                 if (tenNhaHang.length() > 0 && diaChiNhaHang.length() > 0 && soDienThoai.length() > 0 && email.length() > 0){
-                    String id = nhaHang.push().getKey().toString();
+                    moi.setGioMoCua(gioMoCua);
+                    moi.setTenNhaHang(tenNhaHang);
+                    moi.setDiaChiNhaHang(diaChiNhaHang);
+                    moi.setSoDienThoai(soDienThoai);
+                    moi.setEmail(email);
+                    moi.setMoTaNhaHang(moTaNhaHang);
+                } else {
+                    Toast.makeText(ThemMoiNhaHangActivity.this, "Vui lòng nhập đầy đủ thông tin !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -99,12 +131,11 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent themMoiNhaHang = new Intent(ThemMoiNhaHangActivity.this, ThemAnhNhaHang.class);
-                NhaHang a = new NhaHang();
                 Bundle data = new Bundle();
-                data.putSerializable("nhahang",a);
+                data.putSerializable("nhahang",moi);
                 themMoiNhaHang.putExtras(data);
                 // Doan nay phai them bundle de gui sang ben kia.
-                startActivityForResult(themMoiNhaHang,106);
+                startActivityForResult(themMoiNhaHang,130);
             }
         });
 
@@ -112,7 +143,12 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
         btnThucDon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent themMoiNhaHang = new Intent(ThemMoiNhaHangActivity.this, XemThucDonActivity.class);
+                Bundle data = new Bundle();
+                data.putSerializable("nhahang",moi);
+                themMoiNhaHang.putExtras(data);
+                // Doan nay phai them bundle de gui sang ben kia.
+                startActivityForResult(themMoiNhaHang,129);
             }
         });
     }
@@ -120,10 +156,20 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 106 && resultCode == 103){
+        if (requestCode == 130 && resultCode == 103){
             Bundle dulieu = data.getExtras();
             NhaHang a = (NhaHang) dulieu.getSerializable("nhahang");
             moi.setListHinhAnh(a.getListHinhAnh());
+            moi.setId(a.getId());
+        }
+
+        if (requestCode == 129 && requestCode == 102){
+            Bundle dulieu = data.getExtras();
+            NhaHang a = (NhaHang) dulieu.getSerializable("nhahang");
+            moi.setListMonAn(a.getListMonAn());
+            System.out.println(a.getListMonAn());
+            Log.d("monan", a.getListMonAn().toString());
+            moi.setId(a.getId());
         }
     }
 }
