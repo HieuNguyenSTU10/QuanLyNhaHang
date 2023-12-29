@@ -77,7 +77,7 @@ public class XemChiTietNhaHang extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(XemChiTietNhaHang.this,MapsActivity.class);
-                intent.putExtra("nhahang_id", a.getId());
+                intent.putExtra("diaChi", a.getDiaChiNhaHang());
                 startActivity(intent);
             }
         });
