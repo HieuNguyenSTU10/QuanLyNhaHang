@@ -1,5 +1,6 @@
 package com.example.quanlynhahang;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -10,9 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -38,7 +41,7 @@ import java.util.ArrayList;
 
 public class ThemAnhNhaHang extends AppCompatActivity {
     ImageView ivChonAnh;
-    Button btnChonAnh, btnThemAnh, btnTroLai;
+    Button btnChonAnh, btnThemAnh, btnTroLai,btnChupanh;
     ListView lvCacAnhNhaHang;
     ArrayList<String> CacAnhNhaHang = new ArrayList<>();
     CacAnhNhaHangAdapter cacAnhNhaHangAdapter;
@@ -59,6 +62,32 @@ public class ThemAnhNhaHang extends AppCompatActivity {
         btnTroLai = findViewById(R.id.btnTroLai);
         lvCacAnhNhaHang = findViewById(R.id.lvCacAnhNhaHang);
         ivChonAnh = findViewById(R.id.ivChonAnh);
+        btnChupanh = findViewById(R.id.btnChupanh);
+
+        ActivityResultLauncher ChupanhLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult o) {
+                        if(o.getResultCode()==110)
+                        {
+                            Intent intent = o.getData();
+                            Bundle data = intent.getExtras();
+                            String photo = data.getString("anh");
+                            Bitmap bitmap = BitmapFactory.decodeFile(photo);
+                            ivChonAnh.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+        );
+
+        btnChupanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(ThemAnhNhaHang.this,chupanh.class);
+                ChupanhLaunch.launch(intent);
+            }
+        });
 
         CacAnhNhaHang = new ArrayList<>();
         cacAnhNhaHangAdapter = new CacAnhNhaHangAdapter(ThemAnhNhaHang.this,R.layout.lv_cac_anh_nha_hang,CacAnhNhaHang);
@@ -93,6 +122,20 @@ public class ThemAnhNhaHang extends AppCompatActivity {
 //                Toast.makeText(ThemAnhNhaHang.this, position + "", Toast.LENGTH_SHORT).show();
 //            }
 //        });
+
+        //phong to
+        lvCacAnhNhaHang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ThemAnhNhaHang.this,PhongtoAnh.class);
+                Bundle data = new Bundle();
+                data.putString("anh", CacAnhNhaHang.get(position));
+                intent.putExtras(data);
+                startActivity(intent);
+            }
+        });
+
+
         lvCacAnhNhaHang.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -209,7 +252,7 @@ public class ThemAnhNhaHang extends AppCompatActivity {
                 });
             }
         });
-        
+
         btnTroLai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
