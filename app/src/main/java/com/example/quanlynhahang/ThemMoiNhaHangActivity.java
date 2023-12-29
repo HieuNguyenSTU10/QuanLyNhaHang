@@ -30,7 +30,7 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
     TimePicker tpGioMoCua,tpGioDongCua;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
-    DatabaseReference nhaHang = databaseReference.child("NhaHang");
+    DatabaseReference nhaHang = databaseReference.child("nhaHang");
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     StorageReference storageReference = firebaseStorage.getReference();
     NhaHang moi = new NhaHang();

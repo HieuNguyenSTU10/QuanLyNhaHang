@@ -9,6 +9,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -98,6 +99,18 @@ public class XemChiTietNhaHang extends AppCompatActivity {
         tvGioMoCua.setText("Giờ mở cửa : " + a.getGioMoCua());
         tvMoTaNhaHang.setText("Mô tả nhà hàng : " + a.getMoTaNhaHang());
         Glide.with(XemChiTietNhaHang.this).load(a.getAnhNhaHang()).into(ivAnhNhaHang);
+
+        ivAnhNhaHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(XemChiTietNhaHang.this,PhongtoAnh.class);
+                Bundle data = new Bundle();
+                data.putString("anh", a.getAnhNhaHang());
+                intent.putExtras(data);
+                startActivity(intent);
+            }
+        });
+
 
         btnXemAnhNhaHang.setOnClickListener(new View.OnClickListener() {
             @Override

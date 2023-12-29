@@ -46,6 +46,17 @@ public class XemMonAn extends AppCompatActivity {
         tvGiaMonAn.setText("Giá món ăn : " + (int) ma.getGiaMonAn() + "vnđ");
         Glide.with(XemMonAn.this).load(ma.getHinhAnhMinhHoa()).into(ivAnhMonAn);
 
+        ivAnhMonAn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(XemMonAn.this,PhongtoAnh.class);
+                Bundle data = new Bundle();
+                data.putString("anh", ma.getHinhAnhMinhHoa());
+                intent.putExtras(data);
+                startActivity(intent);
+            }
+        });
+
         btnTroLai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

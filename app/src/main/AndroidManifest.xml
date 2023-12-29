@@ -5,6 +5,22 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.CAMERA"
+        android:required="true"
+        android:requiredFeature="true" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -17,8 +33,12 @@
         android:theme="@style/Theme.QuanLyNhaHang"
         tools:targetApi="31">
         <activity
-
-            android:name=".GuiEmail"/>
+            android:name=".PhongtoAnh"
+            android:exported="false" />
+        <activity
+            android:name=".chupanh"
+            android:exported="false" />
+        <activity android:name=".GuiEmail" />
         <activity
             android:name=".MapsActivity"
             android:exported="false" />
@@ -59,6 +79,16 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCeMnxO_0R8ajx_wjd5y8PDnA75Uw_PLsM" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.quanlynhahang.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
