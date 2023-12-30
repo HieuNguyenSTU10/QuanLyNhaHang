@@ -120,6 +120,13 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
                     moi.setSoDienThoai(soDienThoai);
                     moi.setEmail(email);
                     moi.setMoTaNhaHang(moTaNhaHang);
+                    nhaHang.child(id).child("diaChiNhaHang").setValue(diaChiNhaHang);
+                    nhaHang.child(id).child("email").setValue(email);
+                    nhaHang.child(id).child("gioMoCua").setValue(gioMoCua);
+                    nhaHang.child(id).child("id").setValue(id);
+                    nhaHang.child(id).child("moTaNhaHang").setValue(moTaNhaHang);
+                    nhaHang.child(id).child("soDienThoai").setValue(soDienThoai);
+                    nhaHang.child(id).child("tenNhaHang").setValue(tenNhaHang);
                 } else {
                     Toast.makeText(ThemMoiNhaHangActivity.this, "Vui lòng nhập đầy đủ thông tin !", Toast.LENGTH_SHORT).show();
                 }
@@ -160,16 +167,12 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
             Bundle dulieu = data.getExtras();
             NhaHang a = (NhaHang) dulieu.getSerializable("nhahang");
             moi.setListHinhAnh(a.getListHinhAnh());
-            moi.setId(a.getId());
         }
 
-        if (requestCode == 129 && requestCode == 102){
+        if (requestCode == 129 && resultCode == 102){
             Bundle dulieu = data.getExtras();
             NhaHang a = (NhaHang) dulieu.getSerializable("nhahang");
             moi.setListMonAn(a.getListMonAn());
-            System.out.println(a.getListMonAn());
-            Log.d("monan", a.getListMonAn().toString());
-            moi.setId(a.getId());
         }
     }
 }
