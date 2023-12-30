@@ -1,14 +1,19 @@
 package com.example.quanlynhahang;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -32,7 +38,7 @@ public class ThemMoiMonAnActivity extends AppCompatActivity {
 
     EditText edtTenMonAn, edtMoTaMonAn, edtGiaMonAn;
     ImageView ivAnhMonAn;
-    Button btnHuyBo, btnXacNhan,btnChonAnh;
+    Button btnHuyBo, btnXacNhan,btnChonAnh,btnChupanh;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
     DatabaseReference nhaHang = databaseReference.child("nhaHang");
@@ -44,6 +50,7 @@ public class ThemMoiMonAnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_them_moi_mon_an);
 
+        isConnected();
         // Ánh xạ
         edtTenMonAn = findViewById(R.id.edtTenMonAn);
         edtMoTaMonAn = findViewById(R.id.edtMoTaMonAn);
@@ -52,6 +59,32 @@ public class ThemMoiMonAnActivity extends AppCompatActivity {
         btnHuyBo = findViewById(R.id.btnTroLai);
         btnXacNhan = findViewById(R.id.btnXacNhan);
         btnChonAnh = findViewById(R.id.btnChonAnh);
+        btnChupanh = findViewById(R.id.btnChupanh);
+
+        ActivityResultLauncher ChupanhLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult o) {
+                        if(o.getResultCode()==110)
+                        {
+                            Intent intent = o.getData();
+                            Bundle data = intent.getExtras();
+                            String photo = data.getString("anh");
+                            Glide.with(ThemMoiMonAnActivity.this).load(photo).into(ivAnhMonAn);
+
+                        }
+                    }
+                }
+        );
+
+        btnChupanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(ThemMoiMonAnActivity.this,chupanh.class);
+                ChupanhLaunch.launch(intent);
+            }
+        });
 
         // Code
 
@@ -143,5 +176,23 @@ public class ThemMoiMonAnActivity extends AppCompatActivity {
             }
         });
 
+    }
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(ThemMoiMonAnActivity.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 }

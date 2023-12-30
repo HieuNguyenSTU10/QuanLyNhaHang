@@ -32,16 +32,34 @@
             android:layout_gravity="center"
             android:src="@drawable/nhahang" />
 
-        <Button
-            android:id="@+id/btnChonAnhNhaHang"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10px"
-            android:backgroundTint="#000FFE"
-            android:text="Chọn ảnh đại diện"
-            android:textSize="8pt"
-            android:textStyle="bold" />
+            android:gravity="center">
+            <Button
+                android:id="@+id/btnChupanh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10px"
+                android:backgroundTint="#000FFE"
+                android:text="Chụp ảnh đại diện"
+                android:textSize="8pt"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnChonAnhNhaHang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10px"
+                android:backgroundTint="#000FFE"
+                android:text="Chọn ảnh đại diện"
+                android:textSize="8pt"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/btnCacHinhAnhNhaHang"

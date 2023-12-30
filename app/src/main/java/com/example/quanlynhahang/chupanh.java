@@ -7,9 +7,13 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,20 +27,27 @@ import android.widget.Toast;
 import java.io.File;
 import java.net.URI;
 
+import com.bumptech.glide.Glide;
+import com.example.quanlynhahang.MainActivity;
+
+
 public class chupanh extends AppCompatActivity {
     ImageView imgData;
     Button takePicture,TroLai;
     String currentPhotoPath;
 
+
+
     ActivityResultLauncher takePictureLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult o) {
                     if (o.getResultCode()==RESULT_OK)
                     {
-                        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
-                        imgData.setImageBitmap(bitmap);
+                        Glide.with(chupanh.this).load(currentPhotoPath).into(imgData);
+//                        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+//                        imgData.setImageBitmap(bitmap);
                     }
 
                 }
@@ -50,6 +61,7 @@ public class chupanh extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chupanh);
 
+        isConnected();
         imgData = findViewById(R.id.imgData);
         takePicture = findViewById(R.id.takePicture);
         TroLai = findViewById(R.id.TroLai);
@@ -90,5 +102,25 @@ public class chupanh extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // kiểm tra kết nối mạng
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(chupanh.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 }

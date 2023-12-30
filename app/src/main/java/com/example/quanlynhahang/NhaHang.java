@@ -3,6 +3,7 @@ package com.example.quanlynhahang;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class NhaHang implements Serializable {
@@ -127,4 +128,5 @@ public class NhaHang implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+
 }

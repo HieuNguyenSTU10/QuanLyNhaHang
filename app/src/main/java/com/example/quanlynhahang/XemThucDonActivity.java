@@ -4,7 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,6 +44,7 @@ public class XemThucDonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xem_thuc_don);
 
+        isConnected();
         btnTroLai = findViewById(R.id.btnTroLai);
         btnThemMonAn = findViewById(R.id.btnThemMonAn);
         lvMonAn = findViewById(R.id.lvMonAn);
@@ -152,5 +157,23 @@ public class XemThucDonActivity extends AppCompatActivity {
             listMonAn.addAll(listmonan);
             monAnAdapter.notifyDataSetChanged();
         }
+    }
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(XemThucDonActivity.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 }

@@ -1,14 +1,19 @@
 package com.example.quanlynhahang;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +37,7 @@ import java.io.ByteArrayOutputStream;
 
 public class SuaNhaHang extends AppCompatActivity {
     ImageView ivAnhNhaHang;
-    Button btnChonAnh,btnHuyBo, btnXacNhan;
+    Button btnChonAnh,btnHuyBo, btnXacNhan,btnChupanh;
     EditText edtTenNhaHang, edtSoDienThoai, edtEmail, edtMoTaNhaHang, edtDiaChiNhaHang;
     TimePicker tpGioMoCua, tpGioDongCua;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -45,6 +50,7 @@ public class SuaNhaHang extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sua_nha_hang);
 
+        isConnected();
         // Ánh xạ
         ivAnhNhaHang = findViewById(R.id.ivAnhNhaHang);
         btnChonAnh = findViewById(R.id.btnChonAnh);
@@ -57,6 +63,7 @@ public class SuaNhaHang extends AppCompatActivity {
         edtDiaChiNhaHang = findViewById(R.id.edtDiaChiNhaHang);
         tpGioDongCua = findViewById(R.id.tpGioDongCua);
         tpGioMoCua = findViewById(R.id.tpGioMoCua);
+        btnChupanh = findViewById(R.id.btnChupanh);
 
         // Lay itent
         Intent intent = getIntent();
@@ -80,12 +87,40 @@ public class SuaNhaHang extends AppCompatActivity {
         tpGioDongCua.setHour(gioDongCua);
         tpGioDongCua.setMinute(phutDongCua);
 
+
         // Phần code
         // btn hủy bỏ
         btnHuyBo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        ActivityResultLauncher ChupanhLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult o) {
+                        if(o.getResultCode()==110)
+                        {
+                            Intent intent = o.getData();
+                            Bundle data = intent.getExtras();
+                            String photo = data.getString("anh");
+                            Glide.with(SuaNhaHang.this).load(photo).into(ivAnhNhaHang);
+
+//                            Bitmap bitmap = BitmapFactory.decodeFile(photo);
+//                            ivChonAnh.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+        );
+
+        btnChupanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(SuaNhaHang.this,chupanh.class);
+                ChupanhLaunch.launch(intent);
             }
         });
 
@@ -212,5 +247,23 @@ public class SuaNhaHang extends AppCompatActivity {
                 }
             }
         });
+    }
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(SuaNhaHang.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 }
