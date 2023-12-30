@@ -76,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
                     {
                         sumda+=Float.parseFloat(a.getValue().toString());
                     }
-                    arrda = sumda / data4.getChildrenCount();
+                    if (data4.getChildrenCount() == 0) {
+                        arrda = 0;
+                    } else arrda = sumda / data4.getChildrenCount();
                     nh.setTb(arrda);
 
                     ArrayList<monAn> listMonAn = new ArrayList<>();

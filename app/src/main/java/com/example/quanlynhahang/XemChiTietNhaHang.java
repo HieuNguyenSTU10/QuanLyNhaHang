@@ -2,8 +2,10 @@ package com.example.quanlynhahang;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
@@ -15,8 +17,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +34,7 @@ import java.util.Set;
 
 public class XemChiTietNhaHang extends AppCompatActivity {
     TextView tvTenNhaHang, tvDiaChiNhaHang, tvEmail, tvSoDienThoai, tvGioMoCua, tvMoTaNhaHang,textrating;
-    Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang;
+    Button btnTroLai,btnXemAnhNhaHang,btnXemThucDon,btnSuaNhaHang,btnXoaAnhNhaHang;
     ImageButton GuiEmail,phone,sms,btnShowMap;
     ImageView ivAnhNhaHang;
     RatingBar rating;
@@ -54,6 +59,7 @@ public class XemChiTietNhaHang extends AppCompatActivity {
         btnSuaNhaHang = findViewById(R.id.btnSuaNhaHang);
         ivAnhNhaHang = findViewById(R.id.ivAnhNhaHang);
         btnShowMap = findViewById(R.id.btnShowMap);
+        btnXoaAnhNhaHang = findViewById(R.id.btnXoaAnhNhaHang);
 
         GuiEmail = findViewById(R.id.mail);
         phone = findViewById(R.id.phone);
@@ -87,6 +93,35 @@ public class XemChiTietNhaHang extends AppCompatActivity {
             public void onClick(View view) {
                 setResult(100);
                 finish();
+            }
+        });
+
+        btnXoaAnhNhaHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder b = new AlertDialog.Builder(XemChiTietNhaHang.this);
+                b.setTitle("Xóa món ăn");
+                b.setMessage("Bạn có chắc là muốn xóa món ăn khỏi thực đơn không ?");
+                b.setNegativeButton("Hủy bỏ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                b.setPositiveButton("Chắc chắn", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        nhaHang.child(a.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(XemChiTietNhaHang.this, "Xóa nhà hàng thành công"
+                                        , Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        finish();
+                    }
+                });
+                b.create().show();
             }
         });
 

@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +33,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -107,14 +111,43 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String gioMoCua = tpGioMoCua.getHour() + ":" + tpGioMoCua.getMinute() + " - " + tpGioDongCua.getHour() + ":" + tpGioDongCua.getMinute();
+                String gioHoatDong = "";
+                int gioMoCua = tpGioMoCua.getHour();
+                int phutMoCua = tpGioMoCua.getMinute();
+                int gioDongCua = tpGioDongCua.getHour();
+                int phutDongCua = tpGioDongCua.getMinute();
+
+                if (gioMoCua < 10){
+                    gioHoatDong += "0"+gioMoCua+":";
+                } else {
+                    gioHoatDong += gioMoCua+":";
+                }
+
+                if (phutMoCua < 10){
+                    gioHoatDong += "0"+phutMoCua + " - ";
+                } else {
+                    gioHoatDong += phutMoCua + " - ";
+                }
+
+                if (gioDongCua < 10){
+                    gioHoatDong += "0" + gioDongCua + ":";
+                } else {
+                    gioHoatDong += gioDongCua + ":";
+                }
+
+                if (phutDongCua < 10){
+                    gioHoatDong += "0" + phutDongCua;
+                } else {
+                    gioHoatDong += phutDongCua;
+                }
+
                 String tenNhaHang = edtTenNhaHang.getText().toString().trim();
                 String diaChiNhaHang = edtDiaChiNhaHang.getText().toString().trim();
                 String soDienThoai = edtSoDienThoai.getText().toString().trim();
                 String email = edtEmail.getText().toString().trim();
                 String moTaNhaHang = edtMoTaNhaHang.getText().toString().trim();
                 if (tenNhaHang.length() > 0 && diaChiNhaHang.length() > 0 && soDienThoai.length() > 0 && email.length() > 0){
-                    moi.setGioMoCua(gioMoCua);
+                    moi.setGioMoCua(gioHoatDong);
                     moi.setTenNhaHang(tenNhaHang);
                     moi.setDiaChiNhaHang(diaChiNhaHang);
                     moi.setSoDienThoai(soDienThoai);
@@ -122,11 +155,48 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
                     moi.setMoTaNhaHang(moTaNhaHang);
                     nhaHang.child(id).child("diaChiNhaHang").setValue(diaChiNhaHang);
                     nhaHang.child(id).child("email").setValue(email);
-                    nhaHang.child(id).child("gioMoCua").setValue(gioMoCua);
+                    nhaHang.child(id).child("gioMoCua").setValue(gioHoatDong);
                     nhaHang.child(id).child("id").setValue(id);
                     nhaHang.child(id).child("moTaNhaHang").setValue(moTaNhaHang);
                     nhaHang.child(id).child("soDienThoai").setValue(soDienThoai);
                     nhaHang.child(id).child("tenNhaHang").setValue(tenNhaHang);
+
+                    StorageReference anhDaiDien  =
+                            storageReference.child("anhDaiDien").child(id).child(id + ".jpg");
+
+                    BitmapDrawable bitmapDrawable = (BitmapDrawable) imgAnhNhaHang.getDrawable();
+                    Bitmap bitmap = bitmapDrawable.getBitmap();
+                    ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baoStream);
+                    byte[] imgData = baoStream.toByteArray();
+                    anhDaiDien.putBytes(imgData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            anhDaiDien.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String linkAnhMonAn = uri.toString();
+                                    nhaHang.child(id)
+                                            .child("anhNhaHang").setValue(linkAnhMonAn).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()){
+                                                        Toast.makeText(ThemMoiNhaHangActivity.this,
+                                                                "Thêm cửa hàng thành công", Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    } else {
+                                                        Toast.makeText(ThemMoiNhaHangActivity.this,
+                                                                "Thêm cửa hàng thất bại, lỗi : " + task.getException().toString(),
+                                                                Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    }
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    });
+
                 } else {
                     Toast.makeText(ThemMoiNhaHangActivity.this, "Vui lòng nhập đầy đủ thông tin !", Toast.LENGTH_SHORT).show();
                 }

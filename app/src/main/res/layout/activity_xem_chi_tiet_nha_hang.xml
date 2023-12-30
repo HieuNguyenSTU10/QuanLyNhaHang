@@ -147,7 +147,11 @@
 
             </LinearLayout>
 
-
+            <Button
+                android:id="@+id/btnXoaAnhNhaHang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Xóa nhà hàng"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
