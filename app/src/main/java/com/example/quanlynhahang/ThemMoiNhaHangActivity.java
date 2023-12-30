@@ -10,14 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-<<<<<<< HEAD
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-=======
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkRequest;
->>>>>>> Hieu
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
