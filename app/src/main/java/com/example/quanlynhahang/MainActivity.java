@@ -4,10 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.contentcapture.ContentCaptureCondition;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabThemNhaHang;
@@ -35,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         // Ánh xạ
         fabThemNhaHang = findViewById(R.id.fabThemNhaHang);
         lvNhaHang = findViewById(R.id.lvNhaHang);
@@ -49,7 +63,54 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(themMoiNhaHang);
             }
         });
-        docDuLieu();
+        isConnected();
+            docDuLieu();
+    }
+
+    //tao menu
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater =  getMenuInflater();
+        menuInflater.inflate(R.menu.search_menu,menu);
+        MenuItem searchBar = menu.findItem(R.id.searchBar);
+        SearchView searchView = (SearchView) searchBar.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                nhaHangAdapter.getFilter().filter(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                nhaHangAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // kiểm tra kết nối mạng
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(MainActivity.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 
 

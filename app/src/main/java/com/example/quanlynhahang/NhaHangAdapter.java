@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,16 +21,16 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class NhaHangAdapter extends ArrayAdapter {
+public class NhaHangAdapter extends ArrayAdapter implements Filterable {
     Activity context;
     int resource;
-    ArrayList<NhaHang> listNhaHang;
+    ArrayList<NhaHang> listNhaHang,listNhaHangBackup,ListNhaHangFilter;
 
     public NhaHangAdapter(Activity context, int resource, ArrayList<NhaHang> listNhaHang){
         super(context,resource);
         this.context = context;
         this.resource = resource;
-        this.listNhaHang = listNhaHang;
+        this.listNhaHang = this.listNhaHangBackup =listNhaHang;
     }
 
     @Override
@@ -73,5 +75,41 @@ public class NhaHangAdapter extends ArrayAdapter {
         });
 
         return customView;
+    }
+
+    //get filter
+
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String query = constraint.toString().toLowerCase().trim();
+                if (query.length()<1)
+                {
+                    ListNhaHangFilter = listNhaHangBackup;
+                }else {
+                    ListNhaHangFilter = new ArrayList<>();
+                    for (NhaHang nh : listNhaHangBackup)
+                    {
+                        if(nh.getTenNhaHang().toLowerCase().contains(query)
+                        || nh.getDiaChiNhaHang().toLowerCase().contains(query))
+                        {
+                            ListNhaHangFilter.add(nh);
+                        }
+                    }
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values= ListNhaHangFilter;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                listNhaHang = (ArrayList<NhaHang>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

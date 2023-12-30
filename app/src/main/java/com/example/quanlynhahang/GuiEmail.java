@@ -2,7 +2,11 @@ package com.example.quanlynhahang;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +39,7 @@ public class GuiEmail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gui_email);
 
+        isConnected();
         // Lay itent
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
@@ -115,4 +120,22 @@ public class GuiEmail extends AppCompatActivity {
         });
     }
 
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(GuiEmail.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
+    }
 }

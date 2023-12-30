@@ -1,5 +1,6 @@
 package com.example.quanlynhahang;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -7,7 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,7 +43,7 @@ import java.util.HashMap;
 
 public class ThemMoiNhaHangActivity extends AppCompatActivity {
     ImageView imgAnhNhaHang;
-    Button btnChonAnhNhaHang,btnHuyBo,btnXacNhan,btnThucDon,btnCacHinhAnhNhaHang;
+    Button btnChonAnhNhaHang,btnHuyBo,btnXacNhan,btnThucDon,btnCacHinhAnhNhaHang,btnChupanh;
     EditText edtTenNhaHang, edtDiaChiNhaHang, edtEmail , edtSoDienThoai, edtMoTaNhaHang;
     TimePicker tpGioMoCua,tpGioDongCua;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -54,6 +60,7 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
         moi.setId(id);
         System.out.println(id);
 
+        isConnected();
         // Ánh xạ
         imgAnhNhaHang = findViewById(R.id.imgAnhNhaHang);
         btnChonAnhNhaHang = findViewById(R.id.btnChonAnhNhaHang);
@@ -68,6 +75,34 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
         edtMoTaNhaHang = findViewById(R.id.edtMoTaNhaHang);
         tpGioMoCua = findViewById(R.id.tpGioMoCua);
         tpGioDongCua = findViewById(R.id.tpGioDongCua);
+        btnChupanh = findViewById(R.id.btnChupanh);
+
+        ActivityResultLauncher ChupanhLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult o) {
+                        if(o.getResultCode()==110)
+                        {
+                            Intent intent = o.getData();
+                            Bundle data = intent.getExtras();
+                            String photo = data.getString("anh");
+                            Glide.with(ThemMoiNhaHangActivity.this).load(photo).into(imgAnhNhaHang);
+
+//                            Bitmap bitmap = BitmapFactory.decodeFile(photo);
+//                            ivChonAnh.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+        );
+
+        btnChupanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(ThemMoiNhaHangActivity.this,chupanh.class);
+                ChupanhLaunch.launch(intent);
+            }
+        });
 
         // Chọn ảnh
         ActivityResultLauncher chonAnhLauncher = registerForActivityResult(
@@ -171,5 +206,23 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
             Log.d("monan", a.getListMonAn().toString());
             moi.setId(a.getId());
         }
+    }
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(ThemMoiNhaHangActivity.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 }

@@ -4,8 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.util.Log;
@@ -34,7 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
+        isConnected();
         map = findViewById(R.id.map);
 
         // Lấy ID nhà hàng từ Intent
@@ -96,5 +101,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
         return null;
+    }
+
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(MapsActivity.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 }

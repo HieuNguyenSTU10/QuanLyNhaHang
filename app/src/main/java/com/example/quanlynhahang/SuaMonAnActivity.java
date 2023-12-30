@@ -1,14 +1,19 @@
 package com.example.quanlynhahang;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +37,7 @@ import java.io.ByteArrayOutputStream;
 public class SuaMonAnActivity extends AppCompatActivity {
     ImageView ivAnhMonAn;
     EditText edtTenMonAn, edtGiaMonAn, edtMoTaMonAn;
-    Button btnXacNhan, btnHuyBo,btnChonAnh;
+    Button btnXacNhan, btnHuyBo,btnChonAnh,btnChupanh;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
     DatabaseReference nhaHang = databaseReference.child("nhaHang");
@@ -43,6 +48,7 @@ public class SuaMonAnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sua_mon_an);
 
+        isConnected();
         // Ánh xạ
         edtTenMonAn = findViewById(R.id.edtTenMonAn);
         edtGiaMonAn = findViewById(R.id.edtGiaMonAn);
@@ -51,12 +57,40 @@ public class SuaMonAnActivity extends AppCompatActivity {
         btnHuyBo = findViewById(R.id.btnHuyBo);
         btnChonAnh = findViewById(R.id.btnChonAnh);
         ivAnhMonAn = findViewById(R.id.ivAnhMonAn);
+        btnChupanh = findViewById(R.id.btnChupanh);
 
         // Get gia tri tu itent
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
         monAn ma = (monAn) data.getSerializable("monan");
         NhaHang a = (NhaHang) data.getSerializable("nhahang");
+
+        ActivityResultLauncher ChupanhLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult o) {
+                        if(o.getResultCode()==110)
+                        {
+                            Intent intent = o.getData();
+                            Bundle data = intent.getExtras();
+                            String photo = data.getString("anh");
+                            Glide.with(SuaMonAnActivity.this).load(photo).into(ivAnhMonAn);
+
+//                            Bitmap bitmap = BitmapFactory.decodeFile(photo);
+//                            ivChonAnh.setImageBitmap(bitmap);
+                        }
+                    }
+                }
+        );
+
+        btnChupanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(SuaMonAnActivity.this,chupanh.class);
+                ChupanhLaunch.launch(intent);
+            }
+        });
 
         // Activity lay anh
 
@@ -149,5 +183,23 @@ public class SuaMonAnActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(SuaMonAnActivity.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 }

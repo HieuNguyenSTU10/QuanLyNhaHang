@@ -8,11 +8,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,6 +62,8 @@ public class ThemAnhNhaHang extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_them_anh_nha_hang);
+
+        isConnected();
         btnChonAnh = findViewById(R.id.btnChonAnh);
         btnThemAnh = findViewById(R.id.btnThemAnh);
         btnTroLai = findViewById(R.id.btnTroLai);
@@ -74,8 +81,10 @@ public class ThemAnhNhaHang extends AppCompatActivity {
                             Intent intent = o.getData();
                             Bundle data = intent.getExtras();
                             String photo = data.getString("anh");
-                            Bitmap bitmap = BitmapFactory.decodeFile(photo);
-                            ivChonAnh.setImageBitmap(bitmap);
+                            Glide.with(ThemAnhNhaHang.this).load(photo).into(ivChonAnh);
+
+//                            Bitmap bitmap = BitmapFactory.decodeFile(photo);
+//                            ivChonAnh.setImageBitmap(bitmap);
                         }
                     }
                 }
@@ -266,5 +275,23 @@ public class ThemAnhNhaHang extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    void isConnected() {
+        ConnectivityManager cm
+                = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+
+        cm.registerNetworkCallback
+                (
+                        builder.build(),
+                        new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onLost(Network network) {
+                                Intent intent = new Intent(ThemAnhNhaHang.this,CheckInternet.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
     }
 }
