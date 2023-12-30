@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,8 @@ public class XemChiTietNhaHang extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
     DatabaseReference nhaHang = databaseReference.child("nhaHang");
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    StorageReference storageReference = firebaseStorage.getReference();
     NhaHang a = new NhaHang();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,14 +115,49 @@ public class XemChiTietNhaHang extends AppCompatActivity {
                 b.setPositiveButton("Chắc chắn", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        nhaHang.child(a.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        // Xoa trong storage + realtime
+                        nhaHang.child(a.getId()).addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(XemChiTietNhaHang.this, "Xóa nhà hàng thành công"
-                                        , Toast.LENGTH_SHORT).show();
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                DataSnapshot data = snapshot.child("cacAnhNhaHang");
+                                HashMap<String, String> id_anh = new HashMap<>();
+                                id_anh = (HashMap<String, String>) data.getValue();
+                                if (id_anh != null) {
+                                    for (String key : id_anh.keySet()){
+                                        StorageReference fileCanXoa = storageReference.child("anhNhaHang")
+                                                .child(a.getId()).child(key+".jpg");
+                                        fileCanXoa.delete();
+                                    }
+                                }
+
+                                DataSnapshot data1 = snapshot.child("thucDon");
+                                for (DataSnapshot data2 : data1.getChildren()){
+                                    monAn ma = data2.getValue(monAn.class);
+                                    if (ma != null) {
+                                        StorageReference fileCanXoa = storageReference.child("anhMonAn")
+                                                .child(a.getId()).child(ma.getId() +".jpg");
+                                        fileCanXoa.delete();
+                                    }
+                                }
+
+                                StorageReference fileCanXoa = storageReference.child("anhDaiDien")
+                                        .child(a.getId()).child(a.getId()+".jpg");
+                                fileCanXoa.delete();
+
+                                nhaHang.child(a.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(XemChiTietNhaHang.this, "Xóa nhà hàng thành công"
+                                                , Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                finish();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
                             }
                         });
-                        finish();
                     }
                 });
                 b.create().show();

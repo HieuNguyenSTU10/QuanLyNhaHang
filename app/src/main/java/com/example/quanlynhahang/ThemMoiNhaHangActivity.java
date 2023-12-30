@@ -94,15 +94,40 @@ public class ThemMoiNhaHangActivity extends AppCompatActivity {
         btnHuyBo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StorageReference fileCanXoa = storageReference.child("anhNhaHang")
-                        .child(id);
-                fileCanXoa.delete();
-                StorageReference fileCanXoa1 = storageReference.child("anhDaiDien")
-                        .child(id);
-                fileCanXoa1.delete();
-                StorageReference fileCanXoa2 = storageReference.child("anhMonAn")
-                        .child(id);
-                fileCanXoa2.delete();
+                // Xóa trong storage + realtime.
+                nhaHang.child(id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        DataSnapshot data = snapshot.child("cacAnhNhaHang");
+                        HashMap<String, String> id_anh = new HashMap<>();
+                        id_anh = (HashMap<String, String>) data.getValue();
+                        if (id_anh != null) {
+                            for (String key : id_anh.keySet()){
+                                StorageReference fileCanXoa = storageReference.child("anhNhaHang")
+                                        .child(id).child(key+".jpg");
+                                fileCanXoa.delete();
+                            }
+                        }
+
+                        DataSnapshot data1 = snapshot.child("thucDon");
+                        for (DataSnapshot data2 : data1.getChildren()){
+                            monAn ma = data2.getValue(monAn.class);
+                            if (ma != null) {
+                                StorageReference fileCanXoa = storageReference.child("anhMonAn")
+                                        .child(id).child(ma.getId() +".jpg");
+                                fileCanXoa.delete();
+                            }
+                        }
+
+                        StorageReference fileCanXoa = storageReference.child("anhDaiDien")
+                                .child(id+".jpg");
+                        fileCanXoa.delete();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
                 nhaHang.child(id).removeValue();
                 finish();
             }
