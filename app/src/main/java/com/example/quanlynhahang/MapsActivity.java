@@ -28,6 +28,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     GoogleMap gMap;
     FrameLayout map;
+    private DatabaseReference nhaHangRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         map = findViewById(R.id.map);
+
+        // Lấy ID nhà hàng từ Intent
+        String nhahangId = getIntent().getStringExtra("nhahang_id");
+
+        // Khởi tạo DatabaseReference cho nhaHang
+        nhaHangRef = FirebaseDatabase.getInstance().getReference().child("nhaHang");
 
         // Khởi tạo Map Fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -45,21 +52,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.gMap = googleMap;
 
-        // Lấy địa chỉ nhà hàng từ Intent
-        String diaChi = getIntent().getStringExtra("diaChi");
+        // Lấy ID nhà hàng từ Intent
+        String nhahangId = getIntent().getStringExtra("nhahang_id");
 
-        if (diaChi != null) {
-            LatLng nhaHangLatLng = chuyenDiaChiThanhLatLng(diaChi);
-            // Thêm đánh dấu cho địa điểm đích
-            gMap.addMarker(new MarkerOptions().position(nhaHangLatLng).title("Nhà hàng"));
+        // Thực hiện truy vấn đến Firebase để lấy địa chỉ theo ID
+        nhaHangRef.child(nhahangId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    NhaHang nhaHang = dataSnapshot.getValue(NhaHang.class);
 
-            // Di chuyển camera đến địa điểm đích
-            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nhaHangLatLng, 15));
-      } else
-        {
-            Log.e("MapsActivity", "Không tìm thấy địa chỉ nhà hàng");
-        }
-}
+                    if (nhaHang != null) {
+                       LatLng nhaHangLatLng = chuyenDiaChiThanhLatLng(nhaHang.diaChiNhaHang);
+                        // Thêm đánh dấu cho địa điểm đích
+                        gMap.addMarker(new MarkerOptions().position(nhaHangLatLng).title("Nhà hàng"));
+
+                        // Di chuyển camera đến địa điểm đích
+                        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nhaHangLatLng, 15));
+                    }
+                } else {
+                    Log.e("MapsActivity", "Không tìm thấy nhà hàng với ID đã cho");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi từ cơ sở dữ liệu
+                Log.e("FirebaseError", "Error: " + databaseError.getMessage());
+            }
+        });
+    }
 
     private LatLng chuyenDiaChiThanhLatLng(String diaChi) {
         Geocoder geocoder = new Geocoder(this);

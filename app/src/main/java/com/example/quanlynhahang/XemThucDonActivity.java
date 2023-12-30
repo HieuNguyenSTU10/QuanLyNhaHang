@@ -50,8 +50,10 @@ public class XemThucDonActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
         NhaHang a = (NhaHang) data.getSerializable("nhahang");
-        for (monAn ma : a.getListMonAn()){
-            listMonAn.add(ma);
+        if (a.getListMonAn() != null) {
+            for (monAn ma : a.getListMonAn()){
+                listMonAn.add(ma);
+            }
         }
         monAnAdapter.notifyDataSetChanged();
         b = a;
