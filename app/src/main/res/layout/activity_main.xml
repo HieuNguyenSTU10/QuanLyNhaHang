@@ -10,31 +10,38 @@
         android:id="@+id/fabThemNhaHang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#6DB9EF"
+        android:backgroundTint="#069C54"
         android:src="@drawable/add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints"/>
+        tools:ignore="MissingConstraints"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ứng dụng quản lý nah hàng"
+            android:text="Ứng dụng quản lý nhà hàng"
             android:gravity="center_horizontal"
-            android:textColor="#EE7214"
             android:textSize="12pt"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
+            android:textColor="#000"
             android:layout_marginBottom="20px"/>
 
         <ListView
             android:id="@+id/lvNhaHang"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="3dp"
             />
     </LinearLayout>
 

@@ -18,19 +18,37 @@
             android:layout_weight="1"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            >
             <Button
                 android:id="@+id/takePicture"
-                android:text="TextPicture"
+                android:text="Chụp ảnh"
                 android:drawableRight="@drawable/camera"
+                android:drawablePadding="10dp"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/buttonoutline"
+                android:textColor="#069C54"
+                android:textSize="20sp"
+                android:padding="10dp"
+
+                />
             <Button
                 android:id="@+id/TroLai"
                 android:text="Trở lại"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/buttonoutline"
+                android:textColor="#069C54"
+                android:textSize="20sp"
+
+                />
         </LinearLayout>
 
     </LinearLayout>

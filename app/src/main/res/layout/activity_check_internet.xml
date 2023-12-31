@@ -9,8 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="center"
         >
-
+        <ImageView
+            android:src="@drawable/internet"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            />
         <TextView
             android:id="@+id/noti"
             android:layout_width="match_parent"
@@ -21,10 +26,7 @@
             android:textColor="#ff0000"
             android:textSize="20dp"
             android:textStyle="bold" />
-        <ImageView
-            android:src="@drawable/internet"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+
     </LinearLayout>
 
 

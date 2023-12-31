@@ -1,164 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginTop="15dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="0dp">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/black"/>
+            android:background="@android:color/black" />
 
         <TextView
             android:id="@+id/tvTenNhaHang"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:gravity="center"
             android:text="Tên nhà hàng"
-            android:textColor="#6B240C"
+            android:textColor="#069C54"
             android:textSize="12pt"
             android:textStyle="bold|italic" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/black"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/ivAnhNhaHang"
+            <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_launcher_foreground"
-                android:padding="5px"/>
+                android:layout_height="150dp"
+                android:layout_margin="5dp"
+                card_view:cardCornerRadius="75dp">
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@android:color/black"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
+                <ImageView
+                    android:id="@+id/ivAnhNhaHang"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="  Đặt bàn \n (Booking)"
-                    android:gravity="center_horizontal"
-                    android:textColor="#994D1C"
-                    android:textSize="8pt"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="20px"
-                    android:layout_marginTop="20px"/>
-
-                <TextView
-                    android:id="@+id/tvSoDienThoai"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Số điện thoại : 0379273403"
-                    android:textAlignment="center"
-                    android:textStyle="italic"
-                    android:layout_marginBottom="20px"
-                    />
-
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/black"/>
-
-
-            <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Giờ mở cửa"
-                    android:gravity="center_horizontal"
-                    android:textColor="#994D1C"
-                    android:textSize="8pt"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="30px" />
-
-                <TextView
-                    android:id="@+id/tvGioMoCua"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="09:00 - 11:00"
-                    android:gravity="center_horizontal"
-                    android:layout_marginBottom="5px"
-                    android:textColor="#994D1C"
-                    android:textSize="8pt"
-                    android:textStyle="bold"
-                    android:paddingLeft="30px"/>
-            </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@android:color/black"/>
+                    android:scaleType="centerCrop"
+
+                    android:src="@drawable/ic_launcher_foreground" />
+
+            </androidx.cardview.widget.CardView>
+
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_gravity="center"
+                >
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Địa chỉ"
+                    android:layout_marginTop="20px"
+                    android:layout_marginBottom="20px"
                     android:gravity="center_horizontal"
-                    android:textColor="#994D1C"
+                    android:text="  Đặt bàn \n (Booking)"
+                    android:textColor="#707070"
                     android:textSize="8pt"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="10px"/>
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvDiaChi"
+                    android:id="@+id/tvSoDienThoai"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Mô tả nhà hàng tại đây !"
-                    android:layout_marginBottom="10px"
+                    android:layout_marginBottom="20px"
+                    android:text="Số điện thoại : 0379273403"
                     android:textAlignment="center"
-                    android:textSize="6pt"
-                    android:paddingLeft="30px"/>
+                    android:textStyle="italic" />
+
             </LinearLayout>
         </LinearLayout>
 
-            <View
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/black"
-                android:layout_marginBottom="5px"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:gravity="center_horizontal"
+                        android:text="Giờ mở cửa"
+                        android:textColor="#707070"
+                        android:textSize="8pt"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvGioMoCua"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5px"
+                        android:gravity="center_horizontal"
+                        android:paddingLeft="30px"
+                        android:text="09:00 - 11:00"
+                        android:textColor="#707070"
+                        android:textSize="6pt"
+                       />
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:gravity="center_horizontal"
+                        android:text="Địa chỉ"
+                        android:textColor="#707070"
+                        android:textSize="8pt"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDiaChi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10px"
+                        android:paddingLeft="30px"
+                        android:text="Mô tả nhà hàng tại đây !"
+                        android:textAlignment="center"
+                        android:textSize="6pt" />
+                </LinearLayout>
+            </LinearLayout>
+
+
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
